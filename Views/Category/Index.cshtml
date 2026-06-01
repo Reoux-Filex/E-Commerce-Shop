@@ -1,0 +1,51 @@
+﻿@model IEnumerable<E_Commerce_Shop.Models.Category>
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-3">
+        <h2>📂 Categories</h2>
+        <a asp-action="Create" class="btn btn-success">+ Add Category</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Products</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in Model)
+            {
+                <tr>
+                    <td class="fw-bold">@cat.Name</td>
+                    <td>@cat.Description</td>
+                    <td>
+                        <span class="badge bg-primary">
+                            @cat.Products.Count products
+                        </span>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@cat.CategoryId"
+                           class="btn btn-sm btn-warning">✏️ Edit</a>
+                        <a asp-action="Delete" asp-route-id="@cat.CategoryId"
+                           class="btn btn-sm btn-danger">🗑️ Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

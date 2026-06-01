@@ -1,0 +1,53 @@
+﻿@model E_Commerce_Shop.Models.Product
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h4>📦 Product Details</h4>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Product Name</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.Name</dd>
+
+                        <dt class="col-sm-4">Description</dt>
+                        <dd class="col-sm-8">@Model.Description</dd>
+
+                        <dt class="col-sm-4">Price</dt>
+                        <dd class="col-sm-8 text-danger fw-bold fs-5">
+                            @Model.Price.ToString("N0") VNĐ
+                        </dd>
+
+                        <dt class="col-sm-4">Stock</dt>
+                        <dd class="col-sm-8">@Model.Stock items</dd>
+
+                        <dt class="col-sm-4">Category</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-primary">@Model.Category?.Name</span>
+                        </dd>
+                    </dl>
+
+                    <div class="d-flex gap-2 mt-3">
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@Model.ProductId"
+                               class="btn btn-warning">✏️ Edit</a>
+                        }
+                        @if (User.Identity!.IsAuthenticated && !User.IsInRole("Admin"))
+                        {
+                            <a asp-controller="Cart" asp-action="AddToCart"
+                               asp-route-productId="@Model.ProductId"
+                               class="btn btn-success">🛒 Add to Cart</a>
+                        }
+                        <a asp-action="Index" class="btn btn-secondary">← Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+﻿@model E_Commerce_Shop.Models.Category
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4>🗑️ Delete Category</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        Are you sure you want to delete
+                        <strong>@Model.Name</strong>?
+                    </div>
+                    <p>
+                        This category has
+                        <strong>@Model.Products.Count products</strong>.
+                    </p>
+                    <form asp-action="Delete" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="CategoryId" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                Yes, Delete
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

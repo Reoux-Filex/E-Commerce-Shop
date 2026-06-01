@@ -1,0 +1,29 @@
+﻿@model E_Commerce_Shop.Models.Order
+@{
+    ViewData["Title"] = "Order Placed!";
+}
+
+<div class="container mt-4 text-center">
+    <div class="card shadow mx-auto" style="max-width:600px">
+        <div class="card-body py-5">
+            <h1 class="text-success">✅</h1>
+            <h2 class="text-success">Order Placed Successfully!</h2>
+            <p class="text-muted">Order #@Model.OrderId</p>
+            <p>Date: @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+            <p class="fw-bold text-danger fs-5">
+                Total: @Model.TotalAmount.ToString("N0") VNĐ
+            </p>
+            <p>Status: <span class="badge bg-warning">@Model.Status</span></p>
+            <hr />
+            <div class="d-flex gap-2 justify-content-center">
+                <a asp-action="MyOrders" class="btn btn-primary">
+                    📦 View My Orders
+                </a>
+                <a asp-controller="Product" asp-action="Index"
+                       class="btn btn-secondary">
+                    🛍️ Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

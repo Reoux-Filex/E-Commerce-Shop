@@ -1,0 +1,60 @@
+﻿@model IEnumerable<E_Commerce_Shop.Models.Order>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="container mt-4">
+    <h2>📦 My Orders</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <h4 class="text-muted">No orders yet!</h4>
+            <a asp-controller="Product" asp-action="Index"
+               class="btn btn-primary mt-3">Start Shopping</a>
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Order #</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>#@order.OrderId</td>
+                        <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                        <td>@order.OrderItems.Count items</td>
+                        <td class="fw-bold text-danger">
+                            @order.TotalAmount.ToString("N0") VNĐ
+                        </td>
+                        <td>
+                            @{
+                                var badgeColor = order.Status switch
+                                {
+                                    "Pending" => "warning",
+                                    "Processing" => "info",
+                                    "Shipped" => "primary",
+                                    "Delivered" => "success",
+                                    "Cancelled" => "danger",
+                                    _ => "secondary"
+                                };
+                            }
+                            <span class="badge bg-@badgeColor">
+                                @order.Status
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

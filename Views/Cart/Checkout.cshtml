@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Order Summary -->
+        <div class="col-md-7">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4>📋 Order Summary</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.CartItems)
+                            {
+                                <tr>
+                                    <td>@item.Product.Name</td>
+                                    <td>@item.Quantity</td>
+                                    <td>
+                                        @((item.Product.Price * item.Quantity)
+                                            .ToString("N0")) VNĐ
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-warning">
+                                <td colspan="2" class="fw-bold">Total</td>
+                                <td class="fw-bold text-danger">
+                                    @ViewBag.Total.ToString("N0") VNĐ
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping Form -->
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4>🚚 Shipping Information</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Checkout" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">
+                                Shipping Address
+                            </label>
+                            <textarea name="shippingAddress"
+                                      class="form-control" rows="4"
+                                      placeholder="Enter your full address..."
+                                      required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 btn-lg">
+                            🛍️ Place Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
