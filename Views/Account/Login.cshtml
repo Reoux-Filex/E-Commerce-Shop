@@ -4,58 +4,272 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login - E-Commerce Shop</title>
+    <title>Login – E-Commerce Shop</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+    <style>
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+
+            body {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                font-family: 'Segoe UI', sans-serif;
+            }
+
+            .login-wrapper {
+                width: 100%;
+                max-width: 420px;
+                padding: 1rem;
+            }
+
+            .login-card {
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                overflow: hidden;
+            }
+
+            .login-header {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 2.5rem 2rem;
+                text-align: center;
+                color: white;
+            }
+
+            .login-header .shop-icon {
+                font-size: 3rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .login-header h2 {
+                font-size: 1.6rem;
+                font-weight: 700;
+                margin-bottom: 0.25rem;
+            }
+
+            .login-header p {
+                opacity: 0.85;
+                font-size: 0.9rem;
+            }
+
+            .login-body {
+                padding: 2rem;
+            }
+
+            .form-label {
+                font-weight: 600;
+                color: #444;
+                font-size: 0.875rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .input-group-text {
+                background: #f8f9ff;
+                border-right: none;
+                color: #667eea;
+            }
+
+            .form-control {
+                border-left: none;
+                background: #f8f9ff;
+                padding: 0.65rem 1rem;
+            }
+
+            .form-control:focus {
+                box-shadow: none;
+                border-color: #667eea;
+                background: white;
+            }
+
+            .input-group:focus-within .input-group-text {
+                border-color: #667eea;
+                background: white;
+            }
+
+            .btn-login {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border: none;
+                color: white;
+                padding: 0.75rem;
+                font-size: 1rem;
+                font-weight: 600;
+                border-radius: 10px;
+                width: 100%;
+                margin-top: 0.5rem;
+                transition: opacity 0.2s;
+            }
+
+            .btn-login:hover {
+                opacity: 0.9;
+                color: white;
+            }
+
+            .divider {
+                text-align: center;
+                color: #aaa;
+                font-size: 0.8rem;
+                margin: 1.25rem 0;
+                position: relative;
+            }
+
+            .divider::before,
+            .divider::after {
+                content: "";
+                position: absolute;
+                top: 50%;
+                width: 42%;
+                height: 1px;
+                background: #e0e0e0;
+            }
+
+            .divider::before { left: 0; }
+            .divider::after  { right: 0; }
+
+            .demo-accounts {
+                background: #f8f9ff;
+                border-radius: 12px;
+                padding: 1rem;
+                font-size: 0.82rem;
+            }
+
+            .demo-accounts p {
+                margin: 0;
+                color: #555;
+                line-height: 1.8;
+            }
+
+            .demo-accounts .badge-role {
+                display: inline-block;
+                padding: 2px 8px;
+                border-radius: 20px;
+                font-weight: 600;
+                font-size: 0.75rem;
+                margin-right: 4px;
+            }
+
+            .badge-admin {
+                background: #ffe0e0;
+                color: #c0392b;
+            }
+
+            .badge-user {
+                background: #e0f0ff;
+                color: #2980b9;
+            }
+
+            .login-footer {
+                text-align: center;
+                padding: 1rem;
+                background: #fafafa;
+                border-top: 1px solid #f0f0f0;
+                font-size: 0.8rem;
+                color: #aaa;
+            }
+
+            .alert-danger {
+                border-radius: 10px;
+                font-size: 0.875rem;
+            }
+    </style>
 </head>
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card shadow-lg">
-                    <div class="card-header bg-primary text-white text-center py-3">
-                        <h3>🛒 E-Commerce Shop</h3>
-                        <p class="mb-0">Please login to continue</p>
-                    </div>
-                    <div class="card-body p-4">
-                        <form asp-action="Login" method="post">
-                            @Html.AntiForgeryToken()
-                            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+<body>
+    <div class="login-wrapper">
+        <div class="login-card">
 
-                            <div class="mb-3">
-                                <label asp-for="Email" class="form-label fw-bold"></label>
-                                <input asp-for="Email" class="form-control"
-                                       placeholder="Enter email" />
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                            </div>
+            <!-- Header -->
+            <div class="login-header">
+                <div class="shop-icon">🛒</div>
+                <h2>E-Commerce Shop</h2>
+                <p>Sign in to your account</p>
+            </div>
 
-                            <div class="mb-3">
-                                <label asp-for="Password" class="form-label fw-bold"></label>
-                                <input asp-for="Password" class="form-control"
-                                       type="password" placeholder="Enter password" />
-                                <span asp-validation-for="Password" class="text-danger"></span>
-                            </div>
+            <!-- Body -->
+            <div class="login-body">
 
-                            <button type="submit" class="btn btn-primary w-100 py-2">
-                                🔐 Login
-                            </button>
-                        </form>
+                <!-- Error message -->
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger d-flex align-items-center gap-2 mb-3">
+                        <i class="bi bi-exclamation-circle-fill"></i>
+                        <span>Wrong email or password. Please try again.</span>
                     </div>
-                    <div class="card-footer text-muted text-center small">
-                        <p class="mb-1">
-                            👑 Admin: admin@shop.com / admin123
-                        </p>
-                        <p class="mb-0">
-                            👤 User: user@shop.com / user123
-                        </p>
+                }
+
+                <form asp-action="Login" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-envelope-fill"></i>
+                            </span>
+                            <input asp-for="Email"
+                                   class="form-control"
+                                   placeholder="you@example.com"
+                                   autocomplete="email" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
                     </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input asp-for="Password"
+                                   class="form-control"
+                                   type="password"
+                                   placeholder="••••••••"
+                                   autocomplete="current-password" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="btn btn-login">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                    </button>
+                </form>
+
+                <div class="divider">demo accounts</div>
+
+                <!-- Demo accounts -->
+                <div class="demo-accounts">
+                    <p>
+                        <span class="badge-role badge-admin">Admin</span>
+                        admin@shop.com &nbsp;/&nbsp; admin123
+                    </p>
+                    <p>
+                        <span class="badge-role badge-user">User</span>
+                        user@shop.com &nbsp;/&nbsp; user123
+                    </p>
                 </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="login-footer">
+                © 2025 E-Commerce Shop. All rights reserved.
             </div>
         </div>
     </div>
+
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 </body>
 </html>

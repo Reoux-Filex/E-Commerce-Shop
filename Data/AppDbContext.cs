@@ -9,6 +9,7 @@ namespace E_Commerce_Shop.Data
     // We pass IdentityUser because we use the default user (no custom fields needed)
     public class AppDbContext : IdentityDbContext<IdentityUser>
     {
+
         // This constructor receives database settings from Program.cs
         // and passes them to the parent class (DbContext)
         public AppDbContext(DbContextOptions<AppDbContext> options)

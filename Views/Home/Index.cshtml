@@ -1,8 +1,522 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
+    var featured = ViewBag.FeaturedProducts as
+        IEnumerable<E_Commerce_Shop.Models.Product>
+        ?? new List<E_Commerce_Shop.Models.Product>();
+    var categories = ViewBag.Categories as
+        IEnumerable<E_Commerce_Shop.Models.Category>
+        ?? new List<E_Commerce_Shop.Models.Category>();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Styles {
+<style>
+    /* HERO */
+    .hero-section {
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        min-height: 88vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-section::before {
+        content: "";
+        position: absolute;
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(99,102,241,0.3), transparent);
+        top: -100px; right: -100px;
+        border-radius: 50%;
+    }
+    .hero-section::after {
+        content: "";
+        position: absolute;
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, rgba(139,92,246,0.2), transparent);
+        bottom: -50px; left: 200px;
+        border-radius: 50%;
+    }
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(99,102,241,0.2);
+        border: 1px solid rgba(99,102,241,0.4);
+        color: #a5b4fc;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.05em;
+    }
+    .hero-title {
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        font-weight: 900;
+        color: white;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        letter-spacing: -1px;
+    }
+    .hero-title span {
+        background: linear-gradient(135deg, #6366f1, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+        color: rgba(255,255,255,0.65);
+        font-size: 1.1rem;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+        max-width: 480px;
+    }
+    .btn-hero-primary {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white;
+        border: none;
+        padding: 0.85rem 2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        box-shadow: 0 8px 25px rgba(99,102,241,0.4);
+    }
+    .btn-hero-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(99,102,241,0.5);
+        color: white;
+    }
+    .btn-hero-secondary {
+        background: rgba(255,255,255,0.08);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.15);
+        padding: 0.85rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+        backdrop-filter: blur(10px);
+    }
+    .btn-hero-secondary:hover {
+        background: rgba(255,255,255,0.15);
+        color: white;
+        transform: translateY(-2px);
+    }
+    .hero-stats {
+        display: flex;
+        gap: 2rem;
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-stat-number {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: white;
+    }
+    .hero-stat-label {
+        font-size: 0.8rem;
+        color: rgba(255,255,255,0.5);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .hero-image-area {
+        position: relative;
+        z-index: 1;
+    }
+    .hero-product-card {
+        background: rgba(255,255,255,0.06);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: center;
+        color: white;
+    }
+    .hero-emoji {
+        font-size: 6rem;
+        line-height: 1;
+        margin-bottom: 1rem;
+    }
+    .floating-badge {
+        position: absolute;
+        background: white;
+        border-radius: 12px;
+        padding: 10px 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #1a1a1a;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+        background: white;
+        padding: 2rem 0;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+    }
+    .stat-item {
+        text-align: center;
+        padding: 0 2rem;
+        border-right: 1px solid #f0f0f0;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #6366f1;
+    }
+    .stat-label {
+        font-size: 0.8rem;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* CATEGORIES */
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        letter-spacing: -0.5px;
+    }
+    .section-subtitle {
+        color: #999;
+        font-size: 0.95rem;
+    }
+    .category-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid #f0f0f0;
+        transition: all 0.3s;
+        cursor: pointer;
+        text-decoration: none;
+        display: block;
+        color: inherit;
+    }
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(99,102,241,0.15);
+        border-color: #6366f1;
+        color: inherit;
+    }
+    .category-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin: 0 auto 1rem;
+    }
+
+    /* PRODUCTS */
+    .product-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #f0f0f0;
+        transition: all 0.3s;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    }
+    .product-img-area {
+        height: 180px;
+        background: linear-gradient(135deg, #f8f8ff, #eef2ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+    }
+    .product-price {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #6366f1;
+    }
+    .btn-add-cart {
+        background: #6366f1;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn-add-cart:hover {
+        background: #4f46e5;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    /* CTA */
+    .cta-section {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border-radius: 24px;
+        padding: 4rem;
+        text-align: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    .cta-section::before {
+        content: "";
+        position: absolute;
+        width: 200px; height: 200px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+        top: -50px; right: -50px;
+    }
+</style>
+}
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <!-- Left: Text -->
+            <div class="col-lg-6" style="position:relative;z-index:2">
+                <div class="hero-badge">
+                    <i class="bi bi-stars"></i>
+                    NEW ARRIVALS 2025
+                </div>
+                <h1 class="hero-title">
+                    Discover<br/>
+                    Amazing<br/>
+                    <span>Products.</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Shop the latest trends with the best prices.
+                    Fast delivery, easy returns, and 24/7 support.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a asp-controller="Product" asp-action="Index"
+                       class="btn-hero-primary">
+                        <i class="bi bi-grid-fill"></i>
+                        Shop Now
+                    </a>
+                    @if (!User.Identity!.IsAuthenticated)
+                    {
+                        <a asp-controller="Account" asp-action="Login"
+                           class="btn-hero-secondary">
+                            <i class="bi bi-person-circle"></i>
+                            Sign In
+                        </a>
+                    }
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-number">@ViewBag.TotalProducts+</div>
+                        <div class="hero-stat-label">Products</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-number">@ViewBag.TotalCategories+</div>
+                        <div class="hero-stat-label">Categories</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-number">5K+</div>
+                        <div class="hero-stat-label">Happy Customers</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Product showcase -->
+            <div class="col-lg-6 hero-image-area">
+                <div class="hero-product-card">
+                    <div class="hero-emoji">🛍️</div>
+                    <h4 class="text-white fw-bold mb-1">New Season Sale</h4>
+                    <p style="color:rgba(255,255,255,0.6); font-size:0.9rem">
+                        Up to 50% off selected items
+                    </p>
+                    <div class="mt-3">
+                        <span style="background:rgba(99,102,241,0.3);
+                                     color:#a5b4fc;
+                                     padding:6px 16px;
+                                     border-radius:50px;
+                                     font-size:0.8rem;
+                                     font-weight:600;">
+                            Limited Time Only
+                        </span>
+                    </div>
+                </div>
+                <!-- Floating badges -->
+                <div class="floating-badge"
+                     style="top:-20px; right:20px;">
+                    ⭐ 4.9 Rating
+                </div>
+                <div class="floating-badge"
+                     style="bottom:20px; left:-10px;">
+                    🚚 Free Shipping
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== STATS BAR ===== -->
+<section class="stats-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">🚚</div>
+                    <div class="stat-label">Free Delivery</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">🔒</div>
+                    <div class="stat-label">Secure Payment</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">↩️</div>
+                    <div class="stat-label">Easy Returns</div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-item">
+                    <div class="stat-number">💬</div>
+                    <div class="stat-label">24/7 Support</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CATEGORIES ===== -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <p class="section-subtitle text-uppercase fw-bold"
+               style="color:#6366f1; letter-spacing:0.1em;">
+                Browse By
+            </p>
+            <h2 class="section-title">Shop by Category</h2>
+        </div>
+        <div class="row g-3 justify-content-center">
+            @{
+                var icons = new[] { "💻", "👗", "🍕", "🏠", "⚽", "💄" };
+                int i = 0;
+            }
+            @foreach (var cat in categories)
+            {
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a asp-controller="Product" asp-action="Index"
+                       class="category-card">
+                        <div class="category-icon">
+                            @icons[i % icons.Length]
+                        </div>
+                        <div class="fw-700" style="font-size:0.9rem; font-weight:700;">
+                            @cat.Name
+                        </div>
+                        <div class="text-muted" style="font-size:0.75rem;">
+                            @cat.Products.Count items
+                        </div>
+                    </a>
+                </div>
+                i++;
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURED PRODUCTS ===== -->
+<section class="py-5" style="background:white;">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <p class="section-subtitle text-uppercase fw-bold mb-1"
+                   style="color:#6366f1; letter-spacing:0.1em; font-size:0.8rem;">
+                    Hand Picked
+                </p>
+                <h2 class="section-title mb-0">Featured Products</h2>
+            </div>
+            <a asp-controller="Product" asp-action="Index"
+               style="color:#6366f1; font-weight:600; text-decoration:none; font-size:0.9rem;">
+                View All <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+        <div class="row g-4">
+            @foreach (var p in featured)
+            {
+                <div class="col-6 col-md-3">
+                    <div class="product-card">
+                        <div class="product-img-area">📦</div>
+                        <div class="p-3">
+                            <span class="badge mb-1"
+                                  style="background:#eef2ff; color:#6366f1;
+                                         font-size:0.7rem;">
+                                @p.Category?.Name
+                            </span>
+                            <h6 class="fw-bold mb-1" style="font-size:0.9rem;">
+                                @p.Name
+                            </h6>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div class="product-price">
+                                    @p.Price.ToString("N0")đ
+                                </div>
+                                @if (User.Identity!.IsAuthenticated &&
+                                     !User.IsInRole("Admin"))
+                                {
+                                    <a asp-controller="Cart"
+                                       asp-action="AddToCart"
+                                       asp-route-productId="@p.ProductId"
+                                       class="btn-add-cart">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA SECTION ===== -->
+@if (!User.Identity!.IsAuthenticated)
+{
+    <section class="py-5">
+        <div class="container">
+            <div class="cta-section">
+                <h2 class="fw-800 mb-3" style="font-size:2rem; font-weight:800;">
+                    Ready to Start Shopping? 🛒
+                </h2>
+                <p class="mb-4" style="opacity:0.85; font-size:1rem;">
+                    Join thousands of happy customers today.
+                </p>
+                <a asp-controller="Account" asp-action="Login"
+                   style="background:white; color:#6366f1; border:none;
+                          padding:0.85rem 2.5rem; border-radius:12px;
+                          font-weight:700; font-size:1rem;
+                          text-decoration:none; display:inline-block;
+                          transition: all 0.3s;"
+                   onmouseover="this.style.transform='translateY(-2px)'"
+                   onmouseout="this.style.transform='translateY(0)'">
+                    Get Started Free →
+                </a>
+            </div>
+        </div>
+    </section>
+}
